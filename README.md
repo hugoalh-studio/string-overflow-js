@@ -47,7 +47,7 @@ import { ... } from "@hugoalh/string-overflow";// Part / Tree-shake
 ```ts
 StringOverflowTruncator(maximumLength: number, {
   ellipsisMark: string = "...";// Ellipsis mark of the target string.
-  ellipsisPosition: string = "End";// Ellipsis position at the target string.
+  ellipsisPosition: string = "End";// Ellipsis position at the target string (Selection: Start, Middle, End).
   safeURLs: boolean = true;// Whether to prevent URLs get truncated at the target string thus cause issues.
   safeWords: boolean = true;// Whether to prevent words get truncated at the target string.
 } = {}): StringOverflowTruncator;
@@ -59,7 +59,7 @@ StringOverflowTruncator.truncate(item: string): string;
 ```ts
 stringOverflow(item: string, maximumLength: number, {
   ellipsisMark: string = "...";// Ellipsis mark of the target string.
-  ellipsisPosition: string = "End";// Ellipsis position at the target string.
+  ellipsisPosition: string = "End";// Ellipsis position at the target string (Selection: Start, Middle, End).
   safeURLs: boolean = true;// Whether to prevent URLs get truncated at the target string thus cause issues.
   safeWords: boolean = true;// Whether to prevent words get truncated at the target string.
 } = {}): string;
