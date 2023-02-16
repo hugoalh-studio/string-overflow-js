@@ -1,0 +1,20 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		"allowJs": true,
+		"declaration": true,
+		"declarationMap": true,
+		"emitBOM": false,
+		"emitDeclarationOnly": false,
+		"esModuleInterop": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"newLine": "crlf",
+		"noImplicitUseStrict": true,
+		"outDir": "./dist",
+		"target": "ES2019"
+	},
+	"include": [
+		"./src/**/*.ts"
+	]
+}

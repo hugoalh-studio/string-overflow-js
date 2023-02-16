@@ -1,0 +1,1 @@
+{"version":3,"file":"string-overflow-truncator.d.ts","sourceRoot":"","sources":["../src/string-overflow-truncator.ts"],"names":[],"mappings":"AAoEA;;;GAGG;AACH,cAAM,uBAAuB;;IAO5B;;;;;;;;;OASG;gBACS,aAAa,EAAE,MAAM,EAAE,EAClC,YAAoB,EACpB,gBAAwB,EACxB,QAAe,EACf,SAAgB,EAChB;;;;;KAAK;IAkCN;;;;;OAKG;IACH,QAAQ,CAAC,IAAI,EAAE,MAAM,GAAG,MAAM;CA0C9B;AACD,eAAe,uBAAuB,CAAC"}

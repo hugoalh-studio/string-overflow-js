@@ -1,0 +1,45 @@
+{
+	"name": "@hugoalh/string-overflow",
+	"version": "1.0.0",
+	"description": "A module to truncate the string with the specify length; Safe with the emojis, URLs, and words.",
+	"keywords": [
+		"overflow",
+		"string",
+		"truncate"
+	],
+	"homepage": "https://github.com/hugoalh-studio/string-overflow-nodejs#readme",
+	"bugs": {
+		"url": "https://github.com/hugoalh-studio/string-overflow-nodejs/issues"
+	},
+	"license": "MIT",
+	"author": "hugoalh",
+	"type": "module",
+	"main": "./dist/main.js",
+	"exports": {
+		"import": "./dist/main.js"
+	},
+	"types": "./dist/main.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/hugoalh-studio/string-overflow-nodejs.git"
+	},
+	"dependencies": {
+		"@hugoalh/advanced-determine": "^10.0.0",
+		"ansi-regex": "^6.0.1",
+		"char-regex": "^2.0.1",
+		"emoji-regex": "^10.2.1",
+		"url-regex-safe": "^3.0.0"
+	},
+	"devDependencies": {
+		"@types/url-regex-safe": "^1.0.0",
+		"@typescript-eslint/eslint-plugin": "^5.52.0",
+		"@typescript-eslint/parser": "^5.52.0",
+		"eslint": "^8.34.0",
+		"eslint-plugin-only-warn": "^1.1.0",
+		"typescript": "^4.9.5"
+	},
+	"engines": {
+		"node": "^12.20.0 || ^14.15.0 || >=16.13.0"
+	},
+	"private": false
+}
