@@ -12,12 +12,12 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _StringOverflowTruncator_ellipsisMark, _StringOverflowTruncator_ellipsisPosition, _StringOverflowTruncator_maximumLength, _StringOverflowTruncator_resultLengthMaximum, _StringOverflowTruncator_safeURLs, _StringOverflowTruncator_safeWords;
 import { NumberItemFilter } from "@hugoalh/advanced-determine";
 import ansiRegExpOriginal from "ansi-regex";
-const ansiRegExp = new RegExp(ansiRegExpOriginal().source, "u");
 import characterRegExpOriginal from "char-regex";
-const characterRegExp = new RegExp(characterRegExpOriginal().source, "u");
 import emojiRegExpOriginal from "emoji-regex";
-const emojiRegExp = new RegExp(emojiRegExpOriginal().source, "u");
 import urlRegExpOriginal from "url-regex-safe";
+const ansiRegExp = new RegExp(ansiRegExpOriginal().source, "u");
+const characterRegExp = new RegExp(characterRegExpOriginal().source, "u");
+const emojiRegExp = new RegExp(emojiRegExpOriginal().source, "u");
 const urlRegExp = new RegExp(urlRegExpOriginal().source, "u");
 const ellipsisPositionEndRegExp = /^(?:[Ee](?:nd)?|[Rr](?:ight)?)$/u;
 const ellipsisPositionMiddleRegExp = /^(?:[Cc](?:enter)?|[Mm](?:iddle)?)$/u;
