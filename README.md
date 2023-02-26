@@ -44,6 +44,9 @@ import { ... } from "@hugoalh/string-overflow";// Part / Tree-shake
 
 #### Class
 
+<ul>
+<li>
+
 ```ts
 StringOverflowTruncator(maximumLength: number, {
   ellipsisMark: string = "...";// Ellipsis mark of the target string.
@@ -54,7 +57,13 @@ StringOverflowTruncator(maximumLength: number, {
 StringOverflowTruncator.truncate(item: string): string;
 ```
 
+</li>
+</ul>
+
 #### Function
+
+<ul>
+<li>
 
 ```ts
 stringOverflow(item: string, maximumLength: number, {
@@ -64,6 +73,9 @@ stringOverflow(item: string, maximumLength: number, {
   safeWords: boolean = true;// Whether to prevent words get truncated at the target string.
 } = {}): string;
 ```
+
+</li>
+</ul>
 
 ### Example
 
