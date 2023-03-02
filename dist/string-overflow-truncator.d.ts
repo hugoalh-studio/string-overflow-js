@@ -24,9 +24,10 @@ declare class StringOverflowTruncator {
      * @method truncate
      * @description Truncate the string.
      * @param {string} item String that need to truncate.
+     * @param {number} [maximumLengthOverride] Override the preset maximum length of the target string.
      * @returns {string} A truncated string.
      */
-    truncate(item: string): string;
+    truncate(item: string, maximumLengthOverride?: number): string;
 }
 export default StringOverflowTruncator;
 //# sourceMappingURL=string-overflow-truncator.d.ts.map

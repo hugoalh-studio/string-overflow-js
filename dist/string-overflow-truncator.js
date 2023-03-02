@@ -30,6 +30,21 @@ const numberIPSFilter = new NumberItemFilter({
 const wordsRegExp = /[\d\w]+(?:[~@#$%&*_'.-][\d\w]+)*/u;
 /**
  * @access private
+ * @function checkLength
+ * @param {number} maximumLength Maximum length of the target string.
+ * @param {number} ellipsisMarkLength Ellipsis mark length of the target string.
+ * @returns {void}
+ */
+function checkLength(maximumLength, ellipsisMarkLength) {
+    if (!numberIPSFilter.test(maximumLength)) {
+        throw new TypeError(`Argument \`maximumLength\` must be type of number (integer, positive, and safe)!`);
+    }
+    if (ellipsisMarkLength > maximumLength) {
+        throw new Error(`Ellipsis string also overflow!`);
+    }
+}
+/**
+ * @access private
  * @function stringDissect
  * @param {string} item String that need to dissect.
  * @param {object} [param1={}] Options.
@@ -97,9 +112,6 @@ class StringOverflowTruncator {
         _StringOverflowTruncator_resultLengthMaximum.set(this, void 0);
         _StringOverflowTruncator_safeURLs.set(this, void 0);
         _StringOverflowTruncator_safeWords.set(this, void 0);
-        if (!numberIPSFilter.test(maximumLength)) {
-            throw new TypeError(`Argument \`maximumLength\` must be type of number (integer, positive, and safe)!`);
-        }
         if (typeof ellipsisMark !== "string") {
             throw new TypeError(`Argument \`ellipsisMark\` must be type of string!`);
         }
@@ -118,14 +130,12 @@ class StringOverflowTruncator {
         else {
             throw new RangeError(`\`${ellipsisPosition}\` is not a valid ellipsis position!`);
         }
+        checkLength(maximumLength, ellipsisMark.length);
         if (typeof safeURLs !== "boolean") {
             throw new TypeError(`Argument \`safeURLs\` must be type of boolean!`);
         }
         if (typeof safeWords !== "boolean") {
             throw new TypeError(`Argument \`safeWords\` must be type of boolean!`);
-        }
-        if (ellipsisMark.length > maximumLength) {
-            throw new Error(`Ellipsis string also overflow!`);
         }
         __classPrivateFieldSet(this, _StringOverflowTruncator_ellipsisMark, ellipsisMark, "f");
         __classPrivateFieldSet(this, _StringOverflowTruncator_maximumLength, maximumLength, "f");
@@ -137,27 +147,35 @@ class StringOverflowTruncator {
      * @method truncate
      * @description Truncate the string.
      * @param {string} item String that need to truncate.
+     * @param {number} [maximumLengthOverride] Override the preset maximum length of the target string.
      * @returns {string} A truncated string.
      */
-    truncate(item) {
+    truncate(item, maximumLengthOverride) {
         if (typeof item !== "string") {
             throw new TypeError(`Argument \`item\` must be type of string!`);
         }
-        if (item.length <= __classPrivateFieldGet(this, _StringOverflowTruncator_maximumLength, "f")) {
+        let maximumLength = __classPrivateFieldGet(this, _StringOverflowTruncator_maximumLength, "f");
+        let resultLengthMaximum = __classPrivateFieldGet(this, _StringOverflowTruncator_resultLengthMaximum, "f");
+        if (typeof maximumLengthOverride !== "undefined") {
+            checkLength(maximumLengthOverride, __classPrivateFieldGet(this, _StringOverflowTruncator_ellipsisMark, "f").length);
+            maximumLength = maximumLengthOverride;
+            resultLengthMaximum = maximumLengthOverride - __classPrivateFieldGet(this, _StringOverflowTruncator_ellipsisMark, "f").length;
+        }
+        if (item.length <= maximumLength) {
             return item;
         }
         let resultLengthLeft = 0;
         let resultLengthRight = 0;
         if (__classPrivateFieldGet(this, _StringOverflowTruncator_ellipsisPosition, "f") === "S") {
-            resultLengthRight = __classPrivateFieldGet(this, _StringOverflowTruncator_resultLengthMaximum, "f");
+            resultLengthRight = resultLengthMaximum;
         }
         else if (__classPrivateFieldGet(this, _StringOverflowTruncator_ellipsisPosition, "f") === "M") {
-            let resultLengthHalf = Math.floor(__classPrivateFieldGet(this, _StringOverflowTruncator_resultLengthMaximum, "f") / 2);
+            let resultLengthHalf = Math.floor(resultLengthMaximum / 2);
             resultLengthLeft = resultLengthHalf;
             resultLengthRight = resultLengthHalf;
         }
         else {
-            resultLengthLeft = __classPrivateFieldGet(this, _StringOverflowTruncator_resultLengthMaximum, "f");
+            resultLengthLeft = resultLengthMaximum;
         }
         let stringGroup = stringDissect(item, {
             safeURLs: __classPrivateFieldGet(this, _StringOverflowTruncator_safeURLs, "f"),

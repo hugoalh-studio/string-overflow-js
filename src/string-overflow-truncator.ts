@@ -18,6 +18,21 @@ const numberIPSFilter = new NumberItemFilter({
 const wordsRegExp = /[\d\w]+(?:[~@#$%&*_'.-][\d\w]+)*/u;
 /**
  * @access private
+ * @function checkLength
+ * @param {number} maximumLength Maximum length of the target string.
+ * @param {number} ellipsisMarkLength Ellipsis mark length of the target string.
+ * @returns {void}
+ */
+function checkLength(maximumLength: number, ellipsisMarkLength: number): void {
+	if (!numberIPSFilter.test(maximumLength)) {
+		throw new TypeError(`Argument \`maximumLength\` must be type of number (integer, positive, and safe)!`);
+	}
+	if (ellipsisMarkLength > maximumLength) {
+		throw new Error(`Ellipsis string also overflow!`);
+	}
+}
+/**
+ * @access private
  * @function stringDissect
  * @param {string} item String that need to dissect.
  * @param {object} [param1={}] Options.
@@ -93,9 +108,6 @@ class StringOverflowTruncator {
 		safeURLs = true,
 		safeWords = true
 	} = {}) {
-		if (!numberIPSFilter.test(maximumLength)) {
-			throw new TypeError(`Argument \`maximumLength\` must be type of number (integer, positive, and safe)!`);
-		}
 		if (typeof ellipsisMark !== "string") {
 			throw new TypeError(`Argument \`ellipsisMark\` must be type of string!`);
 		}
@@ -111,14 +123,12 @@ class StringOverflowTruncator {
 		} else {
 			throw new RangeError(`\`${ellipsisPosition}\` is not a valid ellipsis position!`);
 		}
+		checkLength(maximumLength, ellipsisMark.length);
 		if (typeof safeURLs !== "boolean") {
 			throw new TypeError(`Argument \`safeURLs\` must be type of boolean!`);
 		}
 		if (typeof safeWords !== "boolean") {
 			throw new TypeError(`Argument \`safeWords\` must be type of boolean!`);
-		}
-		if (ellipsisMark.length > maximumLength) {
-			throw new Error(`Ellipsis string also overflow!`);
 		}
 		this.#ellipsisMark = ellipsisMark;
 		this.#maximumLength = maximumLength;
@@ -130,25 +140,33 @@ class StringOverflowTruncator {
 	 * @method truncate
 	 * @description Truncate the string.
 	 * @param {string} item String that need to truncate.
+	 * @param {number} [maximumLengthOverride] Override the preset maximum length of the target string.
 	 * @returns {string} A truncated string.
 	 */
-	truncate(item: string): string {
+	truncate(item: string, maximumLengthOverride?: number): string {
 		if (typeof item !== "string") {
 			throw new TypeError(`Argument \`item\` must be type of string!`);
 		}
-		if (item.length <= this.#maximumLength) {
+		let maximumLength: number = this.#maximumLength;
+		let resultLengthMaximum: number = this.#resultLengthMaximum;
+		if (typeof maximumLengthOverride !== "undefined") {
+			checkLength(maximumLengthOverride, this.#ellipsisMark.length);
+			maximumLength = maximumLengthOverride;
+			resultLengthMaximum = maximumLengthOverride - this.#ellipsisMark.length;
+		}
+		if (item.length <= maximumLength) {
 			return item;
 		}
 		let resultLengthLeft = 0;
 		let resultLengthRight = 0;
 		if (this.#ellipsisPosition === "S") {
-			resultLengthRight = this.#resultLengthMaximum;
+			resultLengthRight = resultLengthMaximum;
 		} else if (this.#ellipsisPosition === "M") {
-			let resultLengthHalf: number = Math.floor(this.#resultLengthMaximum / 2);
+			let resultLengthHalf: number = Math.floor(resultLengthMaximum / 2);
 			resultLengthLeft = resultLengthHalf;
 			resultLengthRight = resultLengthHalf;
 		} else {
-			resultLengthLeft = this.#resultLengthMaximum;
+			resultLengthLeft = resultLengthMaximum;
 		}
 		let stringGroup: string[] = stringDissect(item, {
 			safeURLs: this.#safeURLs,

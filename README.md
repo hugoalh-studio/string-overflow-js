@@ -54,7 +54,10 @@ StringOverflowTruncator(maximumLength: number, {
   safeURLs: boolean = true;// Whether to prevent URLs get truncated at the target string thus cause issues.
   safeWords: boolean = true;// Whether to prevent words get truncated at the target string.
 } = {}): StringOverflowTruncator;
-  .truncate(item: string): string;
+  .truncate(
+    item: string,
+    maximumLengthOverride?: number// Override the preset maximum length of the target string.
+  ): string;
 ```
 
 </li>
