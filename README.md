@@ -35,9 +35,9 @@ npm install @hugoalh/string-overflow
 
 ```js
 /* Either */
-import * as stringOverflow from "@hugoalh/string-overflow";// All
-import stringOverflow from "@hugoalh/string-overflow";// All
-import { ... } from "@hugoalh/string-overflow";// Part / Tree-shake
+import { ... } from "@hugoalh/string-overflow";// Named Import
+import * as stringOverflow from "@hugoalh/string-overflow";// Namespace Import
+import stringOverflow from "@hugoalh/string-overflow";// Default Import
 ```
 
 ### API

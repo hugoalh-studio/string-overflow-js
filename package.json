@@ -24,7 +24,7 @@
 		"url": "git+https://github.com/hugoalh-studio/string-overflow-nodejs.git"
 	},
 	"dependencies": {
-		"@hugoalh/advanced-determine": "^10.1.0",
+		"@hugoalh/advanced-determine": "^10.2.0",
 		"ansi-regex": "^6.0.1",
 		"char-regex": "^2.0.1",
 		"emoji-regex": "^10.2.1",
@@ -32,9 +32,9 @@
 	},
 	"devDependencies": {
 		"@types/url-regex-safe": "^1.0.0",
-		"@typescript-eslint/eslint-plugin": "^5.54.0",
-		"@typescript-eslint/parser": "^5.54.0",
-		"eslint": "^8.35.0",
+		"@typescript-eslint/eslint-plugin": "^5.54.1",
+		"@typescript-eslint/parser": "^5.54.1",
+		"eslint": "^8.36.0",
 		"eslint-plugin-only-warn": "^1.1.0",
 		"typescript": "^4.9.5"
 	},
