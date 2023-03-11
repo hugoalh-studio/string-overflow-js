@@ -1,5 +1,4 @@
 import { type StringDissectorOptions } from "@hugoalh/string-dissect";
-
 interface StringOverflowTruncatorOptions extends StringDissectorOptions {
 	/** Ellipsis mark of the target string. [Default: `"..."`] */
 	ellipsisMark?: string;
