@@ -1,27 +1,19 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@hugoalh/advanced-determine': ^10.2.0
-  '@types/url-regex-safe': ^1.0.0
+  '@hugoalh/advanced-determine': ^10.2.1
+  '@hugoalh/string-dissect': ^1.1.0
   '@typescript-eslint/eslint-plugin': ^5.54.1
   '@typescript-eslint/parser': ^5.54.1
-  ansi-regex: ^6.0.1
-  char-regex: ^2.0.1
-  emoji-regex: ^10.2.1
   eslint: ^8.36.0
   eslint-plugin-only-warn: ^1.1.0
   typescript: ^4.9.5
-  url-regex-safe: ^3.0.0
 
 dependencies:
-  '@hugoalh/advanced-determine': 10.2.0
-  ansi-regex: 6.0.1
-  char-regex: 2.0.1
-  emoji-regex: 10.2.1
-  url-regex-safe: 3.0.0
+  '@hugoalh/advanced-determine': 10.2.1
+  '@hugoalh/string-dissect': 1.1.0
 
 devDependencies:
-  '@types/url-regex-safe': 1.0.0
   '@typescript-eslint/eslint-plugin': 5.54.1_4rfaf6mlw2mmutqjcopwvbftpu
   '@typescript-eslint/parser': 5.54.1_vgl77cfdswitgr47lm5swmv43m
   eslint: 8.36.0
@@ -67,15 +59,27 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@hugoalh/advanced-determine/10.2.0:
-    resolution: {integrity: sha512-pG3GP5MBNWzTPC1hi5bKfl+RVfzTmCH15x5sG4L7ohC3HUkV4cNGXH4D8S2h7It28rC6eECHodIFy4ZOwa/PLw==}
+  /@hugoalh/advanced-determine/10.2.1:
+    resolution: {integrity: sha512-1bZ+Jmu++xP/n7G3y29cgJrYs1s5z/3i49b25E3kGBu0PnY5U+h/13L9OFR5Er0MYxBque0OYGkBM6iLJWJjVQ==}
     engines: {node: ^12.20.0 || ^14.15.0 || >=16.13.0}
     dependencies:
-      '@hugoalh/undefinish': 1.0.19
+      '@hugoalh/undefinish': 1.0.20
     dev: false
 
-  /@hugoalh/undefinish/1.0.19:
-    resolution: {integrity: sha512-SBwLs00iX8HvsyJTSu3+LIfqIVYM1VNMlC3+N4dV6tiCpBGC+mMHpeMIdoX3Y8NYbc2zzHKQ/LSkH7Ru0M/O+Q==}
+  /@hugoalh/string-dissect/1.1.0:
+    resolution: {integrity: sha512-5CDF8mkZs2drZj4CMB09TUibpTPtO5IM9iJ19Alr2uDlKdMamttvgCmMCAx9khELPuAlgdgN7TxfDW+il7hfQg==}
+    engines: {node: ^12.20.0 || ^14.15.0 || >=16.13.0}
+    dependencies:
+      ansi-regex: 6.0.1
+      char-regex: 2.0.1
+      emoji-regex: 10.2.1
+      url-regex-safe: 3.0.0
+    transitivePeerDependencies:
+      - re2
+    dev: false
+
+  /@hugoalh/undefinish/1.0.20:
+    resolution: {integrity: sha512-jlFeCIp5M7B6+R6HEGqv7hCu7dER2fFZ7/qLYlgDRBKRKRn0A43tkQpEABXLXuGz9sibGuQaqIvOGii1Eog+iQ==}
     engines: {node: '>=6.9.0'}
     dev: false
 
@@ -126,10 +130,6 @@ packages:
 
   /@types/semver/7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
-    dev: true
-
-  /@types/url-regex-safe/1.0.0:
-    resolution: {integrity: sha512-4ktZEdl4U+ETSm8asxGDLsveKH2vl+9+d8NWYuvmI2YfCtpkNG+XffjoD9vtduPdHWJEr+VFet6r3F57Y9oTww==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.54.1_4rfaf6mlw2mmutqjcopwvbftpu:

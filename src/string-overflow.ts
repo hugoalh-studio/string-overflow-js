@@ -1,7 +1,8 @@
-import StringOverflowTruncator from "./string-overflow-truncator.js";
+import { StringOverflowTruncator } from "./string-overflow-truncator.js";
+import { type StringOverflowTruncatorOptions } from "./type.js";
 /**
  * @function stringOverflow
- * @description String truncator to truncate the string with the specify length; Safe with the emojis, URLs, and words.
+ * @description Truncate the string with the specify length; Safe with the emojis, URLs, and words.
  * @param {string} item String that need to truncate.
  * @param {number} maximumLength Maximum length of the target string.
  * @param {object} [param2={}] Options.
@@ -16,7 +17,7 @@ function stringOverflow(item: string, maximumLength: number, {
 	ellipsisPosition = "End",
 	safeURLs = true,
 	safeWords = true
-} = {}): string {
+}: StringOverflowTruncatorOptions = {}): string {
 	return new StringOverflowTruncator(maximumLength, {
 		ellipsisMark,
 		ellipsisPosition,
@@ -24,4 +25,6 @@ function stringOverflow(item: string, maximumLength: number, {
 		safeWords
 	}).truncate(item);
 }
-export default stringOverflow;
+export {
+	stringOverflow
+};

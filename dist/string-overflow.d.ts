@@ -1,6 +1,7 @@
+import { type StringOverflowTruncatorOptions } from "./type.js";
 /**
  * @function stringOverflow
- * @description String truncator to truncate the string with the specify length; Safe with the emojis, URLs, and words.
+ * @description Truncate the string with the specify length; Safe with the emojis, URLs, and words.
  * @param {string} item String that need to truncate.
  * @param {number} maximumLength Maximum length of the target string.
  * @param {object} [param2={}] Options.
@@ -10,11 +11,6 @@
  * @param {boolean} [param2.safeWords=true] Whether to prevent words get truncated at the target string.
  * @returns {string} A truncated string.
  */
-declare function stringOverflow(item: string, maximumLength: number, { ellipsisMark, ellipsisPosition, safeURLs, safeWords }?: {
-    ellipsisMark?: string;
-    ellipsisPosition?: string;
-    safeURLs?: boolean;
-    safeWords?: boolean;
-}): string;
-export default stringOverflow;
+declare function stringOverflow(item: string, maximumLength: number, { ellipsisMark, ellipsisPosition, safeURLs, safeWords }?: StringOverflowTruncatorOptions): string;
+export { stringOverflow };
 //# sourceMappingURL=string-overflow.d.ts.map

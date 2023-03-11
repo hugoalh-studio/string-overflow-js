@@ -1,12 +1,6 @@
 import { NumberItemFilter } from "@hugoalh/advanced-determine";
-import ansiRegExpOriginal from "ansi-regex";
-import characterRegExpOriginal from "char-regex";
-import emojiRegExpOriginal from "emoji-regex";
-import urlRegExpOriginal from "url-regex-safe";
-const ansiRegExp = new RegExp(ansiRegExpOriginal().source, "u");
-const characterRegExp = new RegExp(characterRegExpOriginal().source, "u");
-const emojiRegExp = new RegExp(emojiRegExpOriginal().source, "u");
-const urlRegExp = new RegExp(urlRegExpOriginal().source, "u");
+import { StringDissector, type StringDescriptor } from "@hugoalh/string-dissect";
+import { type StringOverflowTruncatorOptions } from "./type.js";
 const ellipsisPositionEndRegExp = /^(?:[Ee](?:nd)?|[Rr](?:ight)?)$/u;
 const ellipsisPositionMiddleRegExp = /^(?:[Cc](?:enter)?|[Mm](?:iddle)?)$/u;
 const ellipsisPositionStartRegExp = /^(?:[Ll](?:eft)?|[Ss](?:tart)?)$/u;
@@ -15,7 +9,6 @@ const numberIPSFilter = new NumberItemFilter({
 	positive: true,
 	safe: true
 });
-const wordsRegExp = /[\d\w]+(?:[~@#$%&*_'.-][\d\w]+)*/u;
 /**
  * @access private
  * @function checkLength
@@ -32,56 +25,6 @@ function checkLength(maximumLength: number, ellipsisMarkLength: number): void {
 	}
 }
 /**
- * @access private
- * @function stringDissect
- * @param {string} item String that need to dissect.
- * @param {object} [param1={}] Options.
- * @param {boolean} [param1.safeURLs=true] Whether to prevent URLs get truncated at the target string thus cause issues.
- * @param {boolean} [param1.safeWords=true] Whether to prevent words get truncated at the target string.
- * @returns {string[]} A dissected string.
- */
-function stringDissect(item: string, {
-	safeURLs = true,
-	safeWords = true
-} = {}): string[] {
-	let itemRaw: string = item;
-	let result: string[] = [];
-	/**
-	 * @access private
-	 * @function unshiftString
-	 * @param {string} content
-	 * @returns {void}
-	 */
-	function unshiftString(content: string): void {
-		result.push(content);
-		itemRaw = itemRaw.substring(content.length);
-	}
-	while (itemRaw.length > 0) {
-		if (itemRaw.search(ansiRegExp) === 0) {
-			unshiftString(itemRaw.match(ansiRegExp)[0]);
-			continue;
-		}
-		if (itemRaw.search(emojiRegExp) === 0) {
-			unshiftString(itemRaw.match(emojiRegExp)[0]);
-			continue;
-		}
-		if (safeURLs && itemRaw.search(urlRegExp) === 0) {
-			unshiftString(itemRaw.match(urlRegExp)[0]);
-			continue;
-		}
-		if (safeWords && itemRaw.search(wordsRegExp) === 0) {
-			unshiftString(itemRaw.match(wordsRegExp)[0]);
-			continue;
-		}
-		if (itemRaw.search(characterRegExp) === 0) {
-			unshiftString(itemRaw.match(characterRegExp)[0]);
-			continue;
-		}
-		unshiftString(itemRaw.charAt(0));
-	}
-	return result;
-}
-/**
  * @class StringOverflowTruncator
  * @description String truncator to truncate the string with the specify length; Safe with the emojis, URLs, and words.
  */
@@ -90,8 +33,7 @@ class StringOverflowTruncator {
 	#ellipsisPosition: string;
 	#maximumLength: number;
 	#resultLengthMaximum: number;
-	#safeURLs: boolean;
-	#safeWords: boolean;
+	#stringDissector: StringDissector;
 	/**
 	 * @constructor
 	 * @description Initialize string truncator.
@@ -107,7 +49,7 @@ class StringOverflowTruncator {
 		ellipsisPosition = "End",
 		safeURLs = true,
 		safeWords = true
-	} = {}) {
+	}: StringOverflowTruncatorOptions = {}) {
 		if (typeof ellipsisMark !== "string") {
 			throw new TypeError(`Argument \`ellipsisMark\` must be type of string!`);
 		}
@@ -124,17 +66,13 @@ class StringOverflowTruncator {
 			throw new RangeError(`\`${ellipsisPosition}\` is not a valid ellipsis position!`);
 		}
 		checkLength(maximumLength, ellipsisMark.length);
-		if (typeof safeURLs !== "boolean") {
-			throw new TypeError(`Argument \`safeURLs\` must be type of boolean!`);
-		}
-		if (typeof safeWords !== "boolean") {
-			throw new TypeError(`Argument \`safeWords\` must be type of boolean!`);
-		}
 		this.#ellipsisMark = ellipsisMark;
 		this.#maximumLength = maximumLength;
 		this.#resultLengthMaximum = maximumLength - ellipsisMark.length;
-		this.#safeURLs = safeURLs;
-		this.#safeWords = safeWords;
+		this.#stringDissector = new StringDissector({
+			safeURLs,
+			safeWords
+		});
 	}
 	/**
 	 * @method truncate
@@ -168,9 +106,8 @@ class StringOverflowTruncator {
 		} else {
 			resultLengthLeft = resultLengthMaximum;
 		}
-		let stringGroup: string[] = stringDissect(item, {
-			safeURLs: this.#safeURLs,
-			safeWords: this.#safeWords
+		let stringGroup: string[] = this.#stringDissector.dissect(item).map((value: StringDescriptor): string => {
+			return value.value;
 		});
 		let resultStringLeftGroup: string[] = [];
 		for (let index = 0, resultStringLeftLength = 0; index < stringGroup.length; index++) {
@@ -192,5 +129,32 @@ class StringOverflowTruncator {
 		}
 		return `${resultStringLeftGroup.join("")}${this.#ellipsisMark}${resultStringRightGroup.join("")}`;
 	}
+	/**
+	 * @static truncate
+	 * @description Truncate the string with the specify length; Safe with the emojis, URLs, and words.
+	 * @param {string} item String that need to truncate.
+	 * @param {number} maximumLength Maximum length of the target string.
+	 * @param {object} [param2={}] Options.
+	 * @param {string} [param2.ellipsisMark="..."] Ellipsis mark of the target string.
+	 * @param {string} [param2.ellipsisPosition="End"] Ellipsis position at the target string.
+	 * @param {boolean} [param2.safeURLs=true] Whether to prevent URLs get truncated at the target string thus cause issues.
+	 * @param {boolean} [param2.safeWords=true] Whether to prevent words get truncated at the target string.
+	 * @returns {string} A truncated string.
+	 */
+	static truncate(item: string, maximumLength: number, {
+		ellipsisMark = "...",
+		ellipsisPosition = "End",
+		safeURLs = true,
+		safeWords = true
+	}: StringOverflowTruncatorOptions = {}): string {
+		return new this(maximumLength, {
+			ellipsisMark,
+			ellipsisPosition,
+			safeURLs,
+			safeWords
+		}).truncate(item);
+	}
 }
-export default StringOverflowTruncator;
+export {
+	StringOverflowTruncator
+};
