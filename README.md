@@ -48,16 +48,13 @@ import stringOverflow from "@hugoalh/string-overflow";// Default Import
 <li>
 
 ```ts
-StringOverflowTruncator(maximumLength: number, {
-  ellipsisMark: string = "...";// Ellipsis mark of the target string.
-  ellipsisPosition: string = "End";// Ellipsis position at the target string (Selection: Start, Middle, End).
-  safeURLs: boolean = true;// Whether to prevent URLs get truncated at the target string thus cause issues.
-  safeWords: boolean = true;// Whether to prevent words get truncated at the target string.
-} = {}): StringOverflowTruncator;
+new StringOverflowTruncator(maximumLength: number, options: StringOverflowTruncatorOptions = {}): StringOverflowTruncator;
   .truncate(
     item: string,
     maximumLengthOverride?: number// Override the preset maximum length of the target string.
   ): string;
+
+StringOverflowTruncator.truncate(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string;
 ```
 
 </li>
@@ -69,12 +66,24 @@ StringOverflowTruncator(maximumLength: number, {
 <li>
 
 ```ts
-stringOverflow(item: string, maximumLength: number, {
+stringOverflow(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string;
+```
+
+</li>
+</ul>
+
+#### Interface / Type
+
+<ul>
+<li>
+
+```ts
+interface StringOverflowTruncatorOptions {
   ellipsisMark: string = "...";// Ellipsis mark of the target string.
   ellipsisPosition: string = "End";// Ellipsis position at the target string (Selection: Start, Middle, End).
   safeURLs: boolean = true;// Whether to prevent URLs get truncated at the target string thus cause issues.
   safeWords: boolean = true;// Whether to prevent words get truncated at the target string.
-} = {}): string;
+};
 ```
 
 </li>
