@@ -1,1 +1,0 @@
-{"version":3,"file":"string-overflow.d.ts","sourceRoot":"","sources":["../src/string-overflow.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,KAAK,8BAA8B,EAAE,MAAM,WAAW,CAAC;AAChE;;;;;;;;;;;GAWG;AACH,iBAAS,cAAc,CAAC,IAAI,EAAE,MAAM,EAAE,aAAa,EAAE,MAAM,EAAE,EAC5D,YAAoB,EACpB,gBAAwB,EACxB,QAAe,EACf,SAAgB,EAChB,GAAE,8BAAmC,GAAG,MAAM,CAO9C;AACD,OAAO,EACN,cAAc,EACd,CAAC"}
