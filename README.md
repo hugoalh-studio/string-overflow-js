@@ -21,17 +21,13 @@ A NodeJS module to truncate the string with the specify length; Safe with the em
 
 ## 📚 Documentation
 
-### Getting Started
-
-#### Install
+### Target
 
 - NodeJS ^ v12.20.0 || ^ v14.15.0 || >= v16.13.0
 
 ```sh
 npm install @hugoalh/string-overflow
 ```
-
-#### Use
 
 ```js
 /* Either */
