@@ -51,18 +51,15 @@ class StringOverflowTruncator {
 	 * @constructor
 	 * @description Initialize string truncator.
 	 * @param {number} maximumLength Maximum length of the target string.
-	 * @param {object} [param1={}] Options.
-	 * @param {string} [param1.ellipsisMark="..."] Ellipsis mark of the target string.
-	 * @param {string} [param1.ellipsisPosition="End"] Ellipsis position at the target string.
-	 * @param {boolean} [param1.safeURLs=true] Whether to prevent URLs get truncated at the target string thus cause issues.
-	 * @param {boolean} [param1.safeWords=true] Whether to prevent words get truncated at the target string.
+	 * @param {StringOverflowTruncatorOptions} [options={}] Options.
 	 */
-	constructor(maximumLength: number, {
-		ellipsisMark = "...",
-		ellipsisPosition = "End",
-		safeURLs = true,
-		safeWords = true
-	}: StringOverflowTruncatorOptions = {}) {
+	constructor(maximumLength: number, options: StringOverflowTruncatorOptions = {}) {
+		let {
+			ellipsisMark = "...",
+			ellipsisPosition = "End",
+			safeURLs = true,
+			safeWords = true
+		} = options;
 		if (typeof ellipsisMark !== "string") {
 			throw new TypeError(`Argument \`ellipsisMark\` must be type of string!`);
 		}
@@ -147,25 +144,11 @@ class StringOverflowTruncator {
 	 * @description Truncate the string with the specify length; Safe with the emojis, URLs, and words.
 	 * @param {string} item String that need to truncate.
 	 * @param {number} maximumLength Maximum length of the target string.
-	 * @param {object} [param2={}] Options.
-	 * @param {string} [param2.ellipsisMark="..."] Ellipsis mark of the target string.
-	 * @param {string} [param2.ellipsisPosition="End"] Ellipsis position at the target string.
-	 * @param {boolean} [param2.safeURLs=true] Whether to prevent URLs get truncated at the target string thus cause issues.
-	 * @param {boolean} [param2.safeWords=true] Whether to prevent words get truncated at the target string.
+	 * @param {StringOverflowTruncatorOptions} [options={}] Options.
 	 * @returns {string} A truncated string.
 	 */
-	static truncate(item: string, maximumLength: number, {
-		ellipsisMark = "...",
-		ellipsisPosition = "End",
-		safeURLs = true,
-		safeWords = true
-	}: StringOverflowTruncatorOptions = {}): string {
-		return new this(maximumLength, {
-			ellipsisMark,
-			ellipsisPosition,
-			safeURLs,
-			safeWords
-		}).truncate(item);
+	static truncate(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string {
+		return new this(maximumLength, options).truncate(item);
 	}
 }
 /**
@@ -173,25 +156,11 @@ class StringOverflowTruncator {
  * @description Truncate the string with the specify length; Safe with the emojis, URLs, and words.
  * @param {string} item String that need to truncate.
  * @param {number} maximumLength Maximum length of the target string.
- * @param {object} [param2={}] Options.
- * @param {string} [param2.ellipsisMark="..."] Ellipsis mark of the target string.
- * @param {string} [param2.ellipsisPosition="End"] Ellipsis position at the target string.
- * @param {boolean} [param2.safeURLs=true] Whether to prevent URLs get truncated at the target string thus cause issues.
- * @param {boolean} [param2.safeWords=true] Whether to prevent words get truncated at the target string.
+ * @param {StringOverflowTruncatorOptions} [options={}] Options.
  * @returns {string} A truncated string.
  */
-function stringOverflow(item: string, maximumLength: number, {
-	ellipsisMark = "...",
-	ellipsisPosition = "End",
-	safeURLs = true,
-	safeWords = true
-}: StringOverflowTruncatorOptions = {}): string {
-	return new StringOverflowTruncator(maximumLength, {
-		ellipsisMark,
-		ellipsisPosition,
-		safeURLs,
-		safeWords
-	}).truncate(item);
+function stringOverflow(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string {
+	return new StringOverflowTruncator(maximumLength, options).truncate(item);
 }
 export {
 	stringOverflow,
