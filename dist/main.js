@@ -162,7 +162,3 @@ function stringOverflow(item, maximumLength, options = {}) {
     return new StringOverflowTruncator(maximumLength, options).truncate(item);
 }
 export { stringOverflow, StringOverflowTruncator };
-export default {
-    stringOverflow,
-    StringOverflowTruncator
-};

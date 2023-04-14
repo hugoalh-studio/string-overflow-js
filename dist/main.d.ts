@@ -54,9 +54,4 @@ declare class StringOverflowTruncator {
  */
 declare function stringOverflow(item: string, maximumLength: number, options?: StringOverflowTruncatorOptions): string;
 export { stringOverflow, StringOverflowTruncator, type StringOverflowTruncatorOptions };
-declare const _default: {
-    stringOverflow: typeof stringOverflow;
-    StringOverflowTruncator: typeof StringOverflowTruncator;
-};
-export default _default;
 //# sourceMappingURL=main.d.ts.map

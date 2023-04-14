@@ -167,7 +167,3 @@ export {
 	StringOverflowTruncator,
 	type StringOverflowTruncatorOptions
 };
-export default {
-	stringOverflow,
-	StringOverflowTruncator
-};
