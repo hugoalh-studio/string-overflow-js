@@ -24,7 +24,6 @@
 		"url": "git+https://github.com/hugoalh-studio/string-overflow-nodejs.git"
 	},
 	"dependencies": {
-		"@hugoalh/advanced-determine": "^10.3.3",
 		"@hugoalh/string-dissect": "^1.2.0"
 	},
 	"devDependencies": {

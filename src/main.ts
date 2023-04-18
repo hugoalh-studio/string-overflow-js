@@ -1,13 +1,25 @@
-import { NumberItemFilter } from "@hugoalh/advanced-determine";
 import { StringDissector, type StringDescriptor, type StringDissectorOptions } from "@hugoalh/string-dissect";
 const ellipsisPositionEndRegExp = /^(?:[Ee](?:nd)?|[Rr](?:ight)?)$/u;
 const ellipsisPositionMiddleRegExp = /^(?:[Cc](?:enter)?|[Mm](?:iddle)?)$/u;
 const ellipsisPositionStartRegExp = /^(?:[Ll](?:eft)?|[Ss](?:tart)?)$/u;
-const numberIPSFilter = new NumberItemFilter({
-	integer: true,
-	positive: true,
-	safe: true
-});
+/**
+ * @access private
+ * @function $checkLength
+ * @param {number} maximumLength Maximum length of the target string.
+ * @param {number} ellipsisMarkLength Ellipsis mark length of the target string.
+ * @returns {void}
+ */
+function $checkLength(maximumLength: number, ellipsisMarkLength: number): void {
+	if (!(typeof maximumLength === "number" && !Number.isNaN(maximumLength))) {
+		throw new TypeError(`Argument \`maximumLength\` must be type of number!`);
+	}
+	if (!(Number.isSafeInteger(maximumLength) && maximumLength >= 0)) {
+		throw new RangeError(`Argument \`maximumLength\` must be a number which is integer, positive, and safe!`);
+	}
+	if (ellipsisMarkLength > maximumLength) {
+		throw new Error(`Ellipsis string also overflow!`);
+	}
+}
 interface StringOverflowTruncatorOptions extends StringDissectorOptions {
 	/**
 	 * @property ellipsisMark
@@ -21,21 +33,6 @@ interface StringOverflowTruncatorOptions extends StringDissectorOptions {
 	 * @default "End"
 	 */
 	ellipsisPosition?: string;
-}
-/**
- * @access private
- * @function checkLength
- * @param {number} maximumLength Maximum length of the target string.
- * @param {number} ellipsisMarkLength Ellipsis mark length of the target string.
- * @returns {void}
- */
-function checkLength(maximumLength: number, ellipsisMarkLength: number): void {
-	if (!numberIPSFilter.test(maximumLength)) {
-		throw new TypeError(`Argument \`maximumLength\` must be type of number (integer, positive, and safe)!`);
-	}
-	if (ellipsisMarkLength > maximumLength) {
-		throw new Error(`Ellipsis string also overflow!`);
-	}
 }
 /**
  * @class StringOverflowTruncator
@@ -66,16 +63,16 @@ class StringOverflowTruncator {
 		if (typeof ellipsisPosition !== "string") {
 			throw new TypeError(`Argument \`ellipsisPosition\` must be type of string!`);
 		}
-		if (ellipsisPosition.search(ellipsisPositionEndRegExp) === 0) {
+		if (ellipsisPositionEndRegExp.test(ellipsisPosition)) {
 			this.#ellipsisPosition = "E";
-		} else if (ellipsisPosition.search(ellipsisPositionMiddleRegExp) === 0) {
+		} else if (ellipsisPositionMiddleRegExp.test(ellipsisPosition)) {
 			this.#ellipsisPosition = "M";
-		} else if (ellipsisPosition.search(ellipsisPositionStartRegExp) === 0) {
+		} else if (ellipsisPositionStartRegExp.test(ellipsisPosition)) {
 			this.#ellipsisPosition = "S";
 		} else {
 			throw new RangeError(`\`${ellipsisPosition}\` is not a valid ellipsis position!`);
 		}
-		checkLength(maximumLength, ellipsisMark.length);
+		$checkLength(maximumLength, ellipsisMark.length);
 		this.#ellipsisMark = ellipsisMark;
 		this.#maximumLength = maximumLength;
 		this.#resultLengthMaximum = maximumLength - ellipsisMark.length;
@@ -98,7 +95,7 @@ class StringOverflowTruncator {
 		let maximumLength: number = this.#maximumLength;
 		let resultLengthMaximum: number = this.#resultLengthMaximum;
 		if (typeof maximumLengthOverride !== "undefined") {
-			checkLength(maximumLengthOverride, this.#ellipsisMark.length);
+			$checkLength(maximumLengthOverride, this.#ellipsisMark.length);
 			maximumLength = maximumLengthOverride;
 			resultLengthMaximum = maximumLengthOverride - this.#ellipsisMark.length;
 		}

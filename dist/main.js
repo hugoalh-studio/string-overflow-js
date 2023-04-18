@@ -10,26 +10,23 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _StringOverflowTruncator_ellipsisMark, _StringOverflowTruncator_ellipsisPosition, _StringOverflowTruncator_maximumLength, _StringOverflowTruncator_resultLengthMaximum, _StringOverflowTruncator_stringDissector;
-import { NumberItemFilter } from "@hugoalh/advanced-determine";
 import { StringDissector } from "@hugoalh/string-dissect";
 const ellipsisPositionEndRegExp = /^(?:[Ee](?:nd)?|[Rr](?:ight)?)$/u;
 const ellipsisPositionMiddleRegExp = /^(?:[Cc](?:enter)?|[Mm](?:iddle)?)$/u;
 const ellipsisPositionStartRegExp = /^(?:[Ll](?:eft)?|[Ss](?:tart)?)$/u;
-const numberIPSFilter = new NumberItemFilter({
-    integer: true,
-    positive: true,
-    safe: true
-});
 /**
  * @access private
- * @function checkLength
+ * @function $checkLength
  * @param {number} maximumLength Maximum length of the target string.
  * @param {number} ellipsisMarkLength Ellipsis mark length of the target string.
  * @returns {void}
  */
-function checkLength(maximumLength, ellipsisMarkLength) {
-    if (!numberIPSFilter.test(maximumLength)) {
-        throw new TypeError(`Argument \`maximumLength\` must be type of number (integer, positive, and safe)!`);
+function $checkLength(maximumLength, ellipsisMarkLength) {
+    if (!(typeof maximumLength === "number" && !Number.isNaN(maximumLength))) {
+        throw new TypeError(`Argument \`maximumLength\` must be type of number!`);
+    }
+    if (!(Number.isSafeInteger(maximumLength) && maximumLength >= 0)) {
+        throw new RangeError(`Argument \`maximumLength\` must be a number which is integer, positive, and safe!`);
     }
     if (ellipsisMarkLength > maximumLength) {
         throw new Error(`Ellipsis string also overflow!`);
@@ -59,19 +56,19 @@ class StringOverflowTruncator {
         if (typeof ellipsisPosition !== "string") {
             throw new TypeError(`Argument \`ellipsisPosition\` must be type of string!`);
         }
-        if (ellipsisPosition.search(ellipsisPositionEndRegExp) === 0) {
+        if (ellipsisPositionEndRegExp.test(ellipsisPosition)) {
             __classPrivateFieldSet(this, _StringOverflowTruncator_ellipsisPosition, "E", "f");
         }
-        else if (ellipsisPosition.search(ellipsisPositionMiddleRegExp) === 0) {
+        else if (ellipsisPositionMiddleRegExp.test(ellipsisPosition)) {
             __classPrivateFieldSet(this, _StringOverflowTruncator_ellipsisPosition, "M", "f");
         }
-        else if (ellipsisPosition.search(ellipsisPositionStartRegExp) === 0) {
+        else if (ellipsisPositionStartRegExp.test(ellipsisPosition)) {
             __classPrivateFieldSet(this, _StringOverflowTruncator_ellipsisPosition, "S", "f");
         }
         else {
             throw new RangeError(`\`${ellipsisPosition}\` is not a valid ellipsis position!`);
         }
-        checkLength(maximumLength, ellipsisMark.length);
+        $checkLength(maximumLength, ellipsisMark.length);
         __classPrivateFieldSet(this, _StringOverflowTruncator_ellipsisMark, ellipsisMark, "f");
         __classPrivateFieldSet(this, _StringOverflowTruncator_maximumLength, maximumLength, "f");
         __classPrivateFieldSet(this, _StringOverflowTruncator_resultLengthMaximum, maximumLength - ellipsisMark.length, "f");
@@ -94,7 +91,7 @@ class StringOverflowTruncator {
         let maximumLength = __classPrivateFieldGet(this, _StringOverflowTruncator_maximumLength, "f");
         let resultLengthMaximum = __classPrivateFieldGet(this, _StringOverflowTruncator_resultLengthMaximum, "f");
         if (typeof maximumLengthOverride !== "undefined") {
-            checkLength(maximumLengthOverride, __classPrivateFieldGet(this, _StringOverflowTruncator_ellipsisMark, "f").length);
+            $checkLength(maximumLengthOverride, __classPrivateFieldGet(this, _StringOverflowTruncator_ellipsisMark, "f").length);
             maximumLength = maximumLengthOverride;
             resultLengthMaximum = maximumLengthOverride - __classPrivateFieldGet(this, _StringOverflowTruncator_ellipsisMark, "f").length;
         }
