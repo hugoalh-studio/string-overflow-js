@@ -62,7 +62,7 @@ import * as stringOverflow from "@hugoalh/string-overflow";// Namespace Import
     ellipsisPosition: string = "End";// Ellipsis position at the target string (Selection: Start, Middle, End).
     safeURLs: boolean = true;// Whether to prevent URLs get truncated at the target string thus cause issues.
     safeWords: boolean = true;// Whether to prevent words get truncated at the target string.
-  };
+  }
   ```
 
 ### Example
