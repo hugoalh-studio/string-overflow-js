@@ -23,36 +23,33 @@ npm install @hugoalh/string-overflow
 /* Either */
 import { ... } from "@hugoalh/string-overflow";// Named Import
 import * as stringOverflow from "@hugoalh/string-overflow";// Namespace Import
+import StringOverflowTruncator from "@hugoalh/string-overflow";// Default Import (Class `StringOverflowTruncator`)
 ```
 
 ### API
 
-#### Class
-
 - ```ts
-  new StringOverflowTruncator(maximumLength: number, options: StringOverflowTruncatorOptions = {}): StringOverflowTruncator;
-    .truncate(
-      item: string,
-      maximumLengthOverride?: number// Override the preset maximum length of the target string.
-    ): string;
-  
-  StringOverflowTruncator.truncate(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string;
+  class StringOverflowTruncator {
+    constructor(maximumLength: number, options: StringOverflowTruncatorOptions = {}): StringOverflowTruncator;
+    truncate(item: string, maximumLengthOverride?: number): string;
+    static truncate(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string;
+  }
   ```
-
-#### Function
-
 - ```ts
-  stringOverflow(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string;
+  function stringOverflow(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string;
   ```
-
-#### Interface / Type
-
 - ```ts
-  interface StringOverflowTruncatorOptions {
-    ellipsisMark: string = "...";// Ellipsis mark of the target string.
-    ellipsisPosition: string = "End";// Ellipsis position at the target string (Selection: Start, Middle, End).
-    safeURLs: boolean = true;// Whether to prevent URLs get truncated at the target string thus cause issues.
-    safeWords: boolean = true;// Whether to prevent words get truncated at the target string.
+  interface StringOverflowTruncatorOptions extends StringDissectorOptions {
+    /**
+     * Ellipsis mark of the target string.
+     * @default "..."
+     */
+    ellipsisMark?: string;
+    /**
+     * Ellipsis position at the target string.
+     * @default "End"
+     */
+    ellipsisPosition?: string;
   }
   ```
 
@@ -61,11 +58,13 @@ import * as stringOverflow from "@hugoalh/string-overflow";// Namespace Import
 - ```js
   let text = "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores sit. Duo iriure vel dolore illum diam. Ea vero diam diam tincidunt molestie elitr te sed nisl ut vulputate tincidunt accusam sit sed. Amet sea dolore rebum amet accusam labore dolor no sadipscing labore. Sit erat sit sed voluptua tempor sit ea dolor et.";
   
-  /* Class */new StringOverflowTruncator(100).truncate(text);
-  /* Func. */stringOverflow(text, 100);
+  /* Either */
+  new StringOverflowTruncator(100).truncate(text);
+  stringOverflow(text, 100);
   //=> "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores ..."
   
-  /* Class */new StringOverflowTruncator(100, { safeWords: false }).truncate(text);
-  /* Func. */stringOverflow(text, 100, { safeWords: false });
+  /* Either */
+  new StringOverflowTruncator(100, { safeWords: false }).truncate(text);
+  stringOverflow(text, 100, { safeWords: false });
   //=> "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores si..."
   ```
