@@ -10,24 +10,43 @@
 
 A NodeJS module to truncate the string with the specify length; Safe with the emojis, URLs, and words.
 
-## 📓 Documentation
+## 🔰 Begin
 
-### Getting Started
+### Bun
 
-- NodeJS ^ v12.20.0 || ^ v14.15.0 || >= v16.13.0
+> **🧪 Experimental:** Bun is still under development.
 
-```sh
-npm install @hugoalh/string-overflow
-```
+- **Target Version:** ^ v1.0.0, &:
+  - TypeScript >= v5.1.0 *\[Development\]*
+- **Require Permission:** *N/A*
+- **Domain/Registry:**
+  - [NPM](https://www.npmjs.com/package/@hugoalh/string-overflow)
+    ```sh
+    bun add @hugoalh/string-overflow
+    ```
+    ```js
+    import ... from "@hugoalh/string-overflow[@<Tag>]";
+    ```
 
-```js
-/* Either */
-import { ... } from "@hugoalh/string-overflow";// Named Import
-import * as stringOverflow from "@hugoalh/string-overflow";// Namespace Import
-import StringOverflowTruncator from "@hugoalh/string-overflow";// Default Import (Class `StringOverflowTruncator`)
-```
+> **ℹ️ Notice:** It is also able to import part of the module with sub path if available, see [file `package.json`](./package.json) property `exports` for available sub paths.
 
-### API
+### NodeJS
+
+- **Target Version:** ^ v12.20.0 \|\| ^ v14.15.0 \|\| >= v16.13.0, &:
+  - TypeScript >= v5.1.0 *\[Development\]*
+- **Require Permission:** *N/A*
+- **Domain/Registry:**
+  - [NPM](https://www.npmjs.com/package/@hugoalh/string-overflow)
+    ```sh
+    npm install @hugoalh/string-overflow
+    ```
+    ```js
+    import ... from "@hugoalh/string-overflow";
+    ```
+
+> **ℹ️ Notice:** It is also able to import part of the module with sub path if available, see [file `package.json`](./package.json) property `exports` for available sub paths.
+
+## 🧩 API
 
 - ```ts
   class StringOverflowTruncator {
@@ -54,16 +73,19 @@ import StringOverflowTruncator from "@hugoalh/string-overflow";// Default Import
   }
   ```
 
-### Example
+> **ℹ️ Notice:** Documentation is included inside the script file.
+
+## ✍️ Example
 
 - ```js
-  let text = "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores sit. Duo iriure vel dolore illum diam. Ea vero diam diam tincidunt molestie elitr te sed nisl ut vulputate tincidunt accusam sit sed. Amet sea dolore rebum amet accusam labore dolor no sadipscing labore. Sit erat sit sed voluptua tempor sit ea dolor et.";
-  
+  import { stringOverflow, StringOverflowTruncator } from "@hugoalh/string-overflow";
+  const text = "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores sit. Duo iriure vel dolore illum diam. Ea vero diam diam tincidunt molestie elitr te sed nisl ut vulputate tincidunt accusam sit sed. Amet sea dolore rebum amet accusam labore dolor no sadipscing labore. Sit erat sit sed voluptua tempor sit ea dolor et.";
+
   /* Either */
   new StringOverflowTruncator(100).truncate(text);
   stringOverflow(text, 100);
   //=> "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores ..."
-  
+
   /* Either */
   new StringOverflowTruncator(100, { safeWords: false }).truncate(text);
   stringOverflow(text, 100, { safeWords: false });
