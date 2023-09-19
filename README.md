@@ -22,7 +22,7 @@ A NodeJS module to truncate the string with the specify length; Safe with the em
 - **Domain/Registry:**
   - [NPM](https://www.npmjs.com/package/@hugoalh/string-overflow)
     ```sh
-    bun add @hugoalh/string-overflow
+    bun add @hugoalh/string-overflow[@<Tag>]
     ```
     ```js
     import ... from "@hugoalh/string-overflow[@<Tag>]";
@@ -38,7 +38,7 @@ A NodeJS module to truncate the string with the specify length; Safe with the em
 - **Domain/Registry:**
   - [NPM](https://www.npmjs.com/package/@hugoalh/string-overflow)
     ```sh
-    npm install @hugoalh/string-overflow
+    npm install @hugoalh/string-overflow[@<Tag>]
     ```
     ```js
     import ... from "@hugoalh/string-overflow";
