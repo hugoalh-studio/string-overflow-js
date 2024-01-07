@@ -27,8 +27,8 @@
 		"@hugoalh/string-dissect": "^1.2.0"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^6.16.0",
-		"@typescript-eslint/parser": "^6.16.0",
+		"@typescript-eslint/eslint-plugin": "^6.18.0",
+		"@typescript-eslint/parser": "^6.18.0",
 		"eslint": "^8.56.0",
 		"eslint-plugin-only-warn": "^1.1.0",
 		"typescript": "^5.3.3"
