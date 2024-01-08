@@ -32,7 +32,7 @@ A NodeJS module to truncate the string with the specify length; Safe with the em
 
 ### NodeJS
 
-- **Target Version:** ^ v12.20.0 \|\| ^ v14.15.0 \|\| >= v16.13.0, &:
+- **Target Version:** >= v20.9.0, &:
   - TypeScript >= v5.1.0 *\[Development\]*
 - **Require Permission:** *N/A*
 - **Domain/Registry:**
@@ -49,27 +49,27 @@ A NodeJS module to truncate the string with the specify length; Safe with the em
 ## 🧩 API
 
 - ```ts
-  class StringOverflowTruncator {
-    constructor(maximumLength: number, options: StringOverflowTruncatorOptions = {}): StringOverflowTruncator;
+  class StringTruncator {
+    constructor(maximumLength: number, options: StringTruncatorOptions = {}): StringTruncator;
     truncate(item: string, maximumLengthOverride?: number): string;
-    static truncate(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string;
+    static truncate(item: string, maximumLength: number, options: StringTruncatorOptions = {}): string;
   }
   ```
 - ```ts
-  function stringOverflow(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string;
+  function stringTruncate(item: string, maximumLength: number, options: StringTruncatorOptions = {}): string;
   ```
 - ```ts
-  interface StringOverflowTruncatorOptions extends StringDissectorOptions {
+  interface StringTruncatorOptions extends StringDissectorOptions {
     /**
-     * Ellipsis mark of the target string.
-     * @default "..."
-     */
+    * Ellipsis mark of the target string.
+    * @default "..."
+    */
     ellipsisMark?: string;
     /**
-     * Ellipsis position at the target string.
-     * @default "End"
-     */
-    ellipsisPosition?: string;
+    * Ellipsis position at the target string.
+    * @default "end"
+    */
+    ellipsisPosition?: StringTruncateEllipsisPosition | StringTruncateEllipsisPositionStringify;
   }
   ```
 
@@ -78,16 +78,16 @@ A NodeJS module to truncate the string with the specify length; Safe with the em
 ## ✍️ Example
 
 - ```js
-  import { stringOverflow, StringOverflowTruncator } from "@hugoalh/string-overflow";
+  import { stringTruncate, StringTruncator } from "@hugoalh/string-overflow";
   const text = "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores sit. Duo iriure vel dolore illum diam. Ea vero diam diam tincidunt molestie elitr te sed nisl ut vulputate tincidunt accusam sit sed. Amet sea dolore rebum amet accusam labore dolor no sadipscing labore. Sit erat sit sed voluptua tempor sit ea dolor et.";
 
   /* Either */
-  new StringOverflowTruncator(100).truncate(text);
-  stringOverflow(text, 100);
+  new StringTruncator(100).truncate(text);
+  stringTruncate(text, 100);
   //=> "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores ..."
 
   /* Either */
-  new StringOverflowTruncator(100, { safeWords: false }).truncate(text);
-  stringOverflow(text, 100, { safeWords: false });
+  new StringTruncator(100, { safeWords: false }).truncate(text);
+  stringTruncate(text, 100, { safeWords: false });
   //=> "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores si..."
   ```

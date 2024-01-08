@@ -1,25 +1,20 @@
-import { StringDissector, type StringDescriptor, type StringDissectorOptions } from "@hugoalh/string-dissect";
-const ellipsisPositionEndRegExp = /^(?:[Ee](?:nd)?|[Rr](?:ight)?)$/u;
-const ellipsisPositionMiddleRegExp = /^(?:[Cc](?:enter)?|[Mm](?:iddle)?)$/u;
-const ellipsisPositionStartRegExp = /^(?:[Ll](?:eft)?|[Ss](?:tart)?)$/u;
+import { StringDissector, type StringDissectorOptions, type StringSegmentDescriptor } from "@hugoalh/string-dissect";
 /**
- * @access private
- * @param {number} maximumLength Maximum length of the target string.
- * @param {number} ellipsisMarkLength Ellipsis mark length of the target string.
- * @returns {void}
+ * Enum of the string truncate ellipsis position.
  */
-function checkLength(maximumLength: number, ellipsisMarkLength: number): void {
-	if (!(typeof maximumLength === "number" && !Number.isNaN(maximumLength))) {
-		throw new TypeError(`Argument \`maximumLength\` must be type of number!`);
-	}
-	if (!(Number.isSafeInteger(maximumLength) && maximumLength >= 0)) {
-		throw new RangeError(`Argument \`maximumLength\` must be a number which is integer, positive, and safe!`);
-	}
-	if (ellipsisMarkLength > maximumLength) {
-		throw new Error(`Ellipsis string also overflow!`);
-	}
+export enum StringTruncateEllipsisPosition {
+	end = "end",
+	End = "end",
+	middle = "middle",
+	Middle = "middle",
+	start = "start",
+	Start = "start"
 }
-export interface StringOverflowTruncatorOptions extends StringDissectorOptions {
+/**
+ * Key of enum of the string truncate ellipsis position.
+ */
+export type StringTruncateEllipsisPositionStringify = keyof typeof StringTruncateEllipsisPosition;
+export interface StringTruncatorOptions extends StringDissectorOptions {
 	/**
 	 * Ellipsis mark of the target string.
 	 * @default "..."
@@ -27,47 +22,56 @@ export interface StringOverflowTruncatorOptions extends StringDissectorOptions {
 	ellipsisMark?: string;
 	/**
 	 * Ellipsis position at the target string.
-	 * @default "End"
+	 * @default "end"
 	 */
-	ellipsisPosition?: string;
+	ellipsisPosition?: StringTruncateEllipsisPosition | StringTruncateEllipsisPositionStringify;
+}
+/**
+ * Check length.
+ * @access private
+ * @param {number} maximumLength Maximum length of the target string.
+ * @param {number} ellipsisMarkLength Ellipsis mark length of the target string.
+ * @returns {void}
+ */
+function checkLength(maximumLength: number, ellipsisMarkLength: number): void {
+	if (!(Number.isSafeInteger(maximumLength) && maximumLength >= 0)) {
+		throw new RangeError(`Argument \`maximumLength\` is not a number which is integer, positive, and safe!`);
+	}
+	if (ellipsisMarkLength > maximumLength) {
+		throw new Error(`Ellipsis string is too long!`);
+	}
 }
 /**
  * String truncator to truncate the string with the specify length; Safe with the emojis, URLs, and words.
  */
-export class StringOverflowTruncator {
+export class StringTruncator {
 	#ellipsisMark = "...";
-	#ellipsisPosition: "E" | "M" | "S" = "E";
+	#ellipsisPosition: StringTruncateEllipsisPosition = StringTruncateEllipsisPosition.End;
 	#maximumLength: number;
 	#resultLengthMaximum: number;
 	#stringDissector: StringDissector;
 	/**
 	 * Initialize string truncator.
 	 * @param {number} maximumLength Maximum length of the target string.
-	 * @param {StringOverflowTruncatorOptions} [options={}] Options.
+	 * @param {StringTruncatorOptions} [options={}] Options.
 	 */
-	constructor(maximumLength: number, options: StringOverflowTruncatorOptions = {}) {
-		if (typeof options.ellipsisMark === "string") {
+	constructor(maximumLength: number, options: StringTruncatorOptions = {}) {
+		if (typeof options.ellipsisMark !== "undefined") {
 			this.#ellipsisMark = options.ellipsisMark;
-		} else if (typeof options.ellipsisMark !== "undefined") {
-			throw new TypeError(`Argument \`options.ellipsisMark\` must be type of string or undefined!`);
 		}
-		if (typeof options.ellipsisPosition === "string") {
-			if (ellipsisPositionEndRegExp.test(options.ellipsisPosition)) {
-				this.#ellipsisPosition = "E";
-			} else if (ellipsisPositionMiddleRegExp.test(options.ellipsisPosition)) {
-				this.#ellipsisPosition = "M";
-			} else if (ellipsisPositionStartRegExp.test(options.ellipsisPosition)) {
-				this.#ellipsisPosition = "S";
-			} else {
-				throw new RangeError(`\`${options.ellipsisPosition}\` is not a valid ellipsis position!`);
+		if (typeof options.ellipsisPosition !== "undefined") {
+			const value: StringTruncateEllipsisPosition | undefined = StringTruncateEllipsisPosition[options.ellipsisPosition];
+			if (typeof value === "undefined") {
+				throw new RangeError(`\`${options.ellipsisPosition}\` is not a valid ellipsis position! Only accept these values: ${Array.from(new Set(Object.keys(StringTruncateEllipsisPosition).sort()).values()).join(", ")}`);
 			}
-		} else if (typeof options.ellipsisPosition !== "undefined") {
-			throw new TypeError(`Argument \`options.ellipsisPosition\` must be type of string or undefined!`);
+			this.#ellipsisPosition = value;
 		}
-		checkLength(maximumLength, options.ellipsisMark.length);
+		checkLength(maximumLength, this.#ellipsisMark.length);
 		this.#maximumLength = maximumLength;
-		this.#resultLengthMaximum = maximumLength - options.ellipsisMark.length;
+		this.#resultLengthMaximum = this.#maximumLength - this.#ellipsisMark.length;
 		this.#stringDissector = new StringDissector({
+			locales: options.locales,
+			removeANSI: options.removeANSI,
 			safeURLs: options.safeURLs,
 			safeWords: options.safeWords
 		});
@@ -75,13 +79,10 @@ export class StringOverflowTruncator {
 	/**
 	 * Truncate the string.
 	 * @param {string} item String that need to truncate.
-	 * @param {number} [maximumLengthOverride] Override the preset maximum length of the target string.
+	 * @param {number} [maximumLengthOverride] Override the defined maximum length of the target string.
 	 * @returns {string} A truncated string.
 	 */
 	truncate(item: string, maximumLengthOverride?: number): string {
-		if (typeof item !== "string") {
-			throw new TypeError(`Argument \`item\` must be type of string!`);
-		}
 		let maximumLength: number = this.#maximumLength;
 		let resultLengthMaximum: number = this.#resultLengthMaximum;
 		if (typeof maximumLengthOverride !== "undefined") {
@@ -92,59 +93,62 @@ export class StringOverflowTruncator {
 		if (item.length <= maximumLength) {
 			return item;
 		}
-		let resultLengthLeft = 0;
-		let resultLengthRight = 0;
-		if (this.#ellipsisPosition === "S") {
-			resultLengthRight = resultLengthMaximum;
-		} else if (this.#ellipsisPosition === "M") {
-			let resultLengthHalf: number = Math.floor(resultLengthMaximum / 2);
-			resultLengthLeft = resultLengthHalf;
-			resultLengthRight = resultLengthHalf;
-		} else {
-			resultLengthLeft = resultLengthMaximum;
+		let resultLengthEnd = 0;
+		let resultLengthStart = 0;
+		switch (this.#ellipsisPosition) {
+			case "end":
+				resultLengthStart = resultLengthMaximum;
+				break;
+			case "middle": {
+				const resultLengthHalf: number = Math.floor(resultLengthMaximum / 2);
+				resultLengthStart = resultLengthHalf;
+				resultLengthEnd = resultLengthHalf;
+			}
+				break;
+			case "start":
+				resultLengthEnd = resultLengthMaximum;
+				break;
 		}
-		let stringGroup: string[] = this.#stringDissector.dissect(item).map((value: StringDescriptor): string => {
-			return value.value;
+		const stringSegments: string[] = Array.from(this.#stringDissector.dissect(item), (segment: StringSegmentDescriptor): string => {
+			return segment.value;
 		});
-		let resultStringLeftGroup: string[] = [];
-		for (let index = 0, resultStringLeftLength = 0; index < stringGroup.length; index += 1) {
-			let content: string = stringGroup[index];
-			if (resultStringLeftLength + content.length > resultLengthLeft) {
+		let resultStringStart = "";
+		for (let index = 0; index < stringSegments.length; index += 1) {
+			const segment: string = stringSegments[index];
+			if (resultStringStart.length + segment.length > resultLengthStart) {
 				break;
 			}
-			resultStringLeftGroup.push(content);
-			resultStringLeftLength += content.length;
+			resultStringStart = `${resultStringStart}${segment}`;
 		}
-		let resultStringRightGroup: string[] = [];
-		for (let index: number = stringGroup.length - 1, resultStringRightLength = 0; index >= 0; index -= 1) {
-			let content: string = stringGroup[index];
-			if (resultStringRightLength + content.length > resultLengthRight) {
+		let resultStringEnd = "";
+		for (let index: number = stringSegments.length - 1; index >= 0; index -= 1) {
+			const segment: string = stringSegments[index];
+			if (resultStringEnd.length + segment.length > resultLengthEnd) {
 				break;
 			}
-			resultStringRightGroup.unshift(content);
-			resultStringRightLength += content.length;
+			resultStringEnd = `${segment}${resultStringEnd}`;
 		}
-		return `${resultStringLeftGroup.join("")}${this.#ellipsisMark}${resultStringRightGroup.join("")}`;
+		return `${resultStringStart}${this.#ellipsisMark}${resultStringEnd}`;
 	}
 	/**
 	 * Truncate the string with the specify length; Safe with the emojis, URLs, and words.
 	 * @param {string} item String that need to truncate.
 	 * @param {number} maximumLength Maximum length of the target string.
-	 * @param {StringOverflowTruncatorOptions} [options={}] Options.
+	 * @param {StringTruncatorOptions} [options={}] Options.
 	 * @returns {string} A truncated string.
 	 */
-	static truncate(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string {
+	static truncate(item: string, maximumLength: number, options: StringTruncatorOptions = {}): string {
 		return new this(maximumLength, options).truncate(item);
 	}
 }
-export default StringOverflowTruncator;
+export default StringTruncator;
 /**
  * Truncate the string with the specify length; Safe with the emojis, URLs, and words.
  * @param {string} item String that need to truncate.
  * @param {number} maximumLength Maximum length of the target string.
- * @param {StringOverflowTruncatorOptions} [options={}] Options.
+ * @param {StringTruncatorOptions} [options={}] Options.
  * @returns {string} A truncated string.
  */
-export function stringOverflow(item: string, maximumLength: number, options: StringOverflowTruncatorOptions = {}): string {
-	return new StringOverflowTruncator(maximumLength, options).truncate(item);
+export function stringTruncate(item: string, maximumLength: number, options: StringTruncatorOptions = {}): string {
+	return new StringTruncator(maximumLength, options).truncate(item);
 }
