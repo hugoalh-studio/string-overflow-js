@@ -24,6 +24,9 @@
 		"type": "git",
 		"url": "git+https://github.com/hugoalh-studio/string-overflow-nodejs.git"
 	},
+	"scripts": {
+		"build": "tsc"
+	},
 	"dependencies": {
 		"@hugoalh/string-dissect": "^2.0.1"
 	},
