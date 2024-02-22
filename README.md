@@ -72,3 +72,7 @@ A NodeJS module to truncate the string with the specify length; Safe with the em
   stringTruncate(text, 100, { safeWords: false });
   //=> "Vel ex sit est sit est tempor enim et voluptua consetetur gubergren gubergren ut. Amet dolores si..."
   ```
+
+## 🔗 Other Edition
+
+- [Advanced Determine (Deno)](https://github.com/hugoalh-studio/advanced-determine-deno)
