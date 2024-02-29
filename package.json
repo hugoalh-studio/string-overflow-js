@@ -1,6 +1,6 @@
 {
 	"name": "@hugoalh/string-overflow",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "A module to truncate the string with the specify length; Safe with the emojis, URLs, and words.",
 	"keywords": [
 		"overflow",
