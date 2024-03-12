@@ -150,6 +150,12 @@ export default StringTruncator;
  * @param {StringTruncatorOptions} [options={}] Options.
  * @returns {string} A truncated string.
  */
-export function stringTruncate(item: string, maximumLength: number, options: StringTruncatorOptions = {}): string {
+export function truncateString(item: string, maximumLength: number, options: StringTruncatorOptions = {}): string {
 	return new StringTruncator(maximumLength, options).truncate(item);
+}
+export {
+	/**
+	 * @deprecated Renamed to `truncateString`.
+	 */
+	truncateString as stringTruncate
 }

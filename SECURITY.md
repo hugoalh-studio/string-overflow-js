@@ -2,20 +2,33 @@
 
 ## Supported Versions
 
-> | **Legend** | **Description** |
-> |:-:|:--|
-> | 🟤 | Pending / Pre Release / Unstable |
-> | 🔵 | Current Release |
-> | 🟢 | Long Term Support |
-> | 🟠 | Maintenance |
-> | 🔴 | End Of Life / Not Supported |
+> ```mermaid
+> ---
+> title: Versions Status Flow
+> ---
+> flowchart LR
+>   Unstable("Unstable")
+>   Pre("Pre Release")
+>   Release("Release")
+>   LTS("Long Term Support")
+>   Maintenance("Maintenance")
+>   EOL("End Of Life")
+>   Unstable --> Pre
+>   Pre --> Release
+>   subgraph Support
+>     Release -- Major = 0 --> Maintenance
+>     Release -- Major > 0 --> LTS
+>     LTS --> Maintenance
+>   end
+>   Maintenance --> EOL
+> ```
 
-| **Versions** | **Status** | **🔵 Date** | **🟢 Date** | **🔴 Date** | **Target - NodeJS** |
-|:-:|:-:|:-:|:-:|:-:|:-:|
-| v2.X.X | 🟢 | 2024-01-15 | 2024-01-15 | *Unknown* | >= v20.9.0 |
-| v1.X.X | 🟠 | 2023-02-16 | 2023-03-08 | 2024-04-15 | ^ v12.20.0 \|\| ^ v14.15.0 \|\| >= v16.13.0 |
+| **Versions** | **Release Date** | **Long Term Support Date** | **End Of Life Date** |
+|:-:|:-:|:-:|:-:|
+| v2.X.X | 2024-01-15 | 2024-01-15 | *Unknown* |
+| v1.X.X | 2023-02-16 | 2023-03-08 | 2024-04-15 |
 
-> **ℹ️ Notice:**
+> **ℹ️ Note**
 >
 > - The date format is according to ISO 8601 standard.
 > - Values in italic format are subject to change.
