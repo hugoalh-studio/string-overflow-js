@@ -37,7 +37,7 @@
 		"build": "tsc"
 	},
 	"dependencies": {
-		"@hugoalh/string-dissect": "2.0.2"
+		"@hugoalh/string-dissect": "2.0.3"
 	},
 	"devDependencies": {
 		"@stylistic/eslint-plugin": "^1.6.3",

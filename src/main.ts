@@ -158,4 +158,4 @@ export {
 	 * @deprecated Renamed to `truncateString`.
 	 */
 	truncateString as stringTruncate
-}
+};
